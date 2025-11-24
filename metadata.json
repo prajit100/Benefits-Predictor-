@@ -1,0 +1,5 @@
+{
+  "name": "BenefitsPredictor",
+  "description": "A rule-based educational tool to estimate eligibility for U.S. public benefits like SNAP, Medicaid, and WIC.",
+  "requestFramePermissions": []
+}
