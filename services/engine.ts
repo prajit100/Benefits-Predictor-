@@ -1,38 +1,44 @@
-import { HouseholdInput, AssessmentResults, ProgramResult } from '../types';
-import { getFplPercentage } from './fpl';
-import { evaluateSNAP } from './programs/snap';
-import { evaluateMedicaid } from './programs/medicaid';
-import { evaluateWIC } from './programs/wic';
-import { evaluateTANF } from './programs/tanf';
-import { evaluateEITC } from './programs/eitc';
-import { evaluateHousing } from './programs/housing';
+import { AssessmentResults, ControlResult, SecurityInput } from '../types';
+import { evaluateAccess } from './controls/access';
+import { evaluateEndpointProtection } from './controls/endpoint';
+import { evaluateBackups } from './controls/backups';
+import { evaluateTraining } from './controls/training';
+import { evaluateIncidentResponse } from './controls/incident';
+import { evaluatePatching } from './controls/patching';
+import { evaluateVendors } from './controls/vendor';
 
-export const runAssessment = (input: HouseholdInput): AssessmentResults => {
-  // 1. Basic Validation correction
-  // Ensure numbers are valid (though UI should handle this)
-  const cleanInput: HouseholdInput = {
+const getRiskLevel = (overallScore: number): AssessmentResults['riskLevel'] => {
+  if (overallScore >= 80) return 'Low';
+  if (overallScore >= 60) return 'Moderate';
+  return 'High';
+};
+
+export const runAssessment = (input: SecurityInput): AssessmentResults => {
+  const cleanInput: SecurityInput = {
     ...input,
-    grossMonthlyIncome: Math.max(0, input.grossMonthlyIncome),
-    householdSize: Math.max(1, input.householdSize),
+    remoteWorkPercentage: Math.min(100, Math.max(0, input.remoteWorkPercentage)),
+    mfaCoverage: Math.min(100, Math.max(0, input.mfaCoverage)),
   };
 
-  // 2. Run Programs
-  const programs: ProgramResult[] = [
-    evaluateSNAP(cleanInput),
-    evaluateMedicaid(cleanInput),
-    evaluateWIC(cleanInput),
-    evaluateTANF(cleanInput),
-    evaluateEITC(cleanInput),
-    evaluateHousing(cleanInput),
+  const controls: ControlResult[] = [
+    evaluateAccess(cleanInput),
+    evaluateEndpointProtection(cleanInput),
+    evaluatePatching(cleanInput),
+    evaluateBackups(cleanInput),
+    evaluateTraining(cleanInput),
+    evaluateIncidentResponse(cleanInput),
+    evaluateVendors(cleanInput),
   ];
 
-  // 3. Metadata
-  const fplPercentage = getFplPercentage(cleanInput);
+  const overallScore = Math.round(
+    controls.reduce((sum, control) => sum + control.score, 0) / controls.length
+  );
 
   return {
     timestamp: new Date().toISOString(),
     input: cleanInput,
-    programs,
-    fplPercentage
+    controls,
+    overallScore,
+    riskLevel: getRiskLevel(overallScore),
   };
 };

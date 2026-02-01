@@ -1,20 +1,22 @@
-export const STATES = [
-  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", 
-  "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", 
-  "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", 
-  "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", 
-  "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+export const INDUSTRIES = [
+  "Finance",
+  "Healthcare",
+  "Retail",
+  "Manufacturing",
+  "Technology",
+  "Education",
+  "Government",
+  "Energy",
+  "Professional Services",
+  "Other",
 ];
 
-export const MEDICAID_EXPANSION_STATES = [
-  "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "HI", "ID", "IL", 
-  "IN", "IA", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MO", "MT", 
-  "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", 
-  "PA", "RI", "SD", "UT", "VT", "VA", "WA", "WV"
-];
-// Note: This list changes. Used approx list for 2024/2025 logic.
-// Non-expansion approx: AL, FL, GA, KS, MS, SC, TN, TX, WI, WY.
+export const COMPANY_SIZES = ["1-10", "11-50", "51-200", "201-1000", "1000+"] as const;
 
-export const PROGRAM_URLS = {
-  GENERIC: "https://www.benefits.gov/",
+export const RESOURCE_LINKS = {
+  NIST_CSF: "https://www.nist.gov/cyberframework",
+  CISA_STOP_RANSOMWARE: "https://www.cisa.gov/stopransomware",
+  CIS_CONTROLS: "https://www.cisecurity.org/controls",
+  INCIDENT_RESPONSE: "https://www.cisa.gov/incident-response",
+  PHISHING_RESOURCES: "https://www.cisa.gov/phishing",
 };
